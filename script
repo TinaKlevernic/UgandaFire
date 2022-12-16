@@ -1,0 +1,157 @@
+var Uganda = ee.FeatureCollection("projects/ee-klevernictina/assets/UGANDAA"),
+    razlika_viz = {"opacity":1,"bands":["LandCover"],"min":-120,"max":170,"palette":["ff0000"]},
+    Parametri_Viz2019 = {"opacity":1,"bands":["LandCover"],"min":10,"max":180,"palette":["0c08ff"]},
+    Parametri_Viz2020 = {"opacity":1,"bands":["LandCover"],"min":10,"max":180,"palette":["fcff3d"]};
+    
+    
+    //dodavanje shp file uganda
+var shp=ee.FeatureCollection(Uganda).geometry()
+Map.addLayer(Uganda)
+Map.centerObject(Uganda,10);
+
+
+// Vizuuelizacija od 2019 do 2020 godine (podaci dostupni 2001-2020)
+var dataset1= ee.ImageCollection('ESA/CCI/FireCCI/5_1')
+                .filterDate('2019-01-01', '2019-12-31')
+                .max(); //posto ne mozemo klipovati kolekciju slika mi ovim tu kolekciju sjedinjujemo 
+                //u jednu sliku
+//print (dataset1);
+
+var dataset2= ee.ImageCollection('ESA/CCI/FireCCI/5_1')
+                .filterDate('2020-01-01', '2020-12-31')
+                .max();
+//print(dataset2);
+
+
+//2019 godina
+
+var NoBurnedArea1 = dataset1.select('ObservedFlag')
+                          
+var Parametri_vizuelizacije11 = {
+  min: -2, 
+  max: -1,
+  palette: ['5AF1F6','000000' //vodene povrsine 
+  //urbana podrucja,visoki vrhovi,povrsine pod snegom..sve ono sto ne gori!
+  ]
+};
+
+Map.setCenter(32.336, 1.533,6.5); //lokacija uganda
+
+Map.addLayer(NoBurnedArea1.clip(Uganda), Parametri_vizuelizacije11, 'Nesagoreno 2019'); //dodavanje sloja na mapu 
+//gde su parametri vizu. dodavani iznad
+
+
+var BurnedArea1 = dataset1.select('LandCover'); 
+
+
+
+//Dodavanje sloja na mapu
+Map.setCenter(32.336, 1.533,6); 
+Map.addLayer(BurnedArea1.clip(Uganda), Parametri_Viz2019, 'Sagoreno 2019'); 
+
+
+
+//2020 godina
+
+var NoBurnedArea2 = dataset2.select('ObservedFlag');
+var Parametri_vizuelizacije21 = {
+  min: -2, 
+  max: -1,
+  palette: ['5AF1F6','000000' //vodene povrsine 
+  //urbana podrucja,visoki vrhovi,povrsine pod snegom..
+  ]
+};
+
+Map.setCenter(32.336, 1.533,6.5); //lokacija uganda
+Map.addLayer(NoBurnedArea2.clip(Uganda), Parametri_vizuelizacije21, 'Nesagoreno 2020'); 
+//dodavanje sloja na mapu
+
+
+//kreiranje lejera podrucja koje  moze da se zapali -CLC       
+var BurnedArea2 = dataset2.select('LandCover'); 
+
+//Dodavanje sloja na mapu
+Map.setCenter(32.336, 1.533,6); //lokacija NS
+Map.addLayer(BurnedArea2.clip(Uganda),Parametri_Viz2020 , 'Sagoreno 2020'); 
+//parametri viz su u zaglavlju definisani(laksi nacin100x)
+
+
+//pravljenje razlike izmedju pozara 2019 i 2020 godine da bi primetili koliko se dogodilo za skoro 2 god novih pozara
+
+var razlika=BurnedArea2.subtract(BurnedArea1);
+Map.addLayer(razlika.clip(Uganda),razlika_viz,'Razlika izmedju 2019-2020.');
+
+
+
+//DODATI MAPSLAJDER sa Label-ima opisa --Sa Youtube tutorijala :)  --https://www.youtube.com/watch?v=C63lbekwLWc&t=7s
+
+var levaMapa =ui.Map()
+levaMapa.setOptions('SATELLITE')
+var desnaMapa=ui.Map()
+desnaMapa.setOptions('SATELLITE')
+
+
+ var sagoreno_2020_img=ui.Map.Layer(BurnedArea2.clip(Uganda), Parametri_Viz2020) //pravimo slike koje ce se prikazati kao lejer1
+ var sagoreno_2019_img=ui.Map.Layer(BurnedArea1.clip(Uganda), Parametri_Viz2019)//slika kao lejer 2
+ 
+var razlika_img=ui.Map.Layer(razlika.clip(Uganda),{palette:'red'},'Razlika',1)
+var razlika_layer=levaMapa.layers()
+var razlika_layer=desnaMapa.layers()
+
+ var sagoreno2020_layer=levaMapa.layers()
+ var sagoreno2019_layer=desnaMapa.layers()
+ var uganda_lejer=levaMapa.layers()
+  var uganda_lejer=desnaMapa.layers()
+  
+  var ugandatransparent  = Uganda.style({color:'black', fillColor:'ffffff00'});
+
+ uganda_lejer.add(ugandatransparent);
+
+ razlika_layer.add(razlika_img)
+ sagoreno2020_layer.add(sagoreno_2020_img) //lejeru dodelimo sliku
+ sagoreno2019_layer.add(sagoreno_2019_img)
+
+
+
+
+var label2020=ui.Label('Požari 2020. godine')
+label2020.style().set('position','bottom-left')
+var label2019=ui.Label('Požari 2019. godine')
+ label2019.style().set('position','bottom-right')
+ 
+
+ 
+ var checkbox = ui.Checkbox('Razlika 2019-2020', true);
+
+checkbox.onChange(function(checked) {
+  
+ razlika_layer.get(0).setShown(checked);
+});
+
+
+ 
+ levaMapa.add(label2020)
+ desnaMapa.add(label2019)
+ levaMapa.add(checkbox)
+
+
+
+ 
+ var razdelni_panel= ui.SplitPanel({
+   firstPanel:levaMapa,
+   secondPanel:desnaMapa,
+   orientation:'horizontal',
+   wipe:true
+ })
+ 
+ ui.root.clear() //cista pozadina na kojoj se odvija ui
+ 
+ ui.root.add(razdelni_panel)
+
+ 
+ var linkPanel=ui.Map.Linker([levaMapa,desnaMapa]) 
+ 
+ 
+levaMapa.centerObject(Uganda,6.5)
+desnaMapa.centerObject(Uganda,6.5)
+

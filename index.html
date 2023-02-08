@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="images/hero.jpeg" />
+    <title>Uganda Fire </title>
+</head>
+<body>
+
+   <!--  <nav class="navbar">
+        <h1 class="logo"><img src="./images/travellogo.png" alt="Logo"></h1>
+        <ul class="nav-links">    -->
+            <li class="active"><a href="#">First Page</a></li>
+         
+            <li><a  href="kontakt.html">Kontakt</a></li>
+        </ul>
+      
+      
+     
+       <div class="mobile-nav">
+        <img src="./images/img-menu-btn.png" alt="" class="menu-btn">
+        <h1 class="close-btn">X</h1>
+       </div>
+    </nav> 
+
+    <header>
+        <div class="header-content">
+            <h2>Uganda</h2>
+            <div class="line"></div>
+            <h1>FIRE HAZARD</h1>
+            <a href="#" class="ctn">DANGER</a>
+        </div>
+    </header>
+
+        <h3>
+        
+What is FIRE HAZARD? <br> <br> <i> What does it mean? Any actions, materials,
+ or conditions that might increase the size or severity of a fire or tha
+ t might cause a fire to start are called fire hazards. The hazard might 
+ be a fuel that is easy to ignite or a heat source like a defective appliance.</i></h3> 
+        <hr/>
+
+        <section class="blog">
+            <h1>About hazard<br>
+                Fires represent natural-anthropogenic hazards and can occur due to natural influences,
+                 but are most often (in 80% of cases) initiated by an anthropogenic factor (in the case
+                  of forest fires, this percentage is 97%, with less than 3% caused by natural influences).
+            </h1>
+            <p> Fires clearly reveal and express changes in biogeographical conditions,
+             and the effect they have on the environment depends on their size, duration,
+              and intensity. In addition to material damage manifested by the destruction of
+               wood mass and the expenditure of resources for new afforestation, they also destroy the living world on the surface they occupy.  </p>
+        </section>
+        <hr/>
+
+        <section class="tour">
+            <div class="row">
+                <div class="col content-col">
+                    <h4>In the area that we have selected (Uganda) the
+                     wildfire hazard is classified as high according to the
+                      information that is currently available to this tool.
+                       This means that there is a greater than 50% chance of
+                        encountering weather that could support a significant wildfire
+                         that is likely to result in both life and property loss in any given year. </h4>
+              
+                   
+                </div>
+                <div class="col image-col">
+                    <div class="image-gallery">
+                        <img src="./images/slika1.jpg" alt="1">
+                        <img src="./images/slika2.jpg" alt="2">
+                        <img src="./images/slika3.jpg" alt="3">
+                        <img src="./images/slika44.jpg" alt="4">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+<section class=GoogleEarthEngine>
+
+<a href = "https://klevernictina.users.earthengine.app/view/fire-uganda-2019-2020"  >
+ This link show <i>Research of Fire in Uganda (2019-2020) using Google Earth Engine Code Editor</i>
+  </a>
+ 
+
+</section>      
+
+        <section class="footer">
+            <p>Novi Sad, Serbia | Phone: 060-140-67-16 | Email: klevernictina@gmail.com</p>
+            
+        </section>
+    
+        <script>
+            const mobileNav = document.querySelector('.mobile-nav')
+            const menuBtn = document.querySelector('.menu-btn')
+            const navlinks = document.querySelector('.nav-links')
+            const closeBtn = document.querySelector('.close-btn')
+    
+            mobileNav.addEventListener('click',(e)=>{
+                navlinks.classList.toggle('mobile-menu')
+                if(e.target === menuBtn){
+                    menuBtn.replaceWith(closeBtn)
+                    closeBtn.style.display = 'block'
+                }
+                if(e.target === closeBtn){
+                    closeBtn.replaceWith(menuBtn)
+                }
+            })
+        </script>
+    
+</body>
+</html>
